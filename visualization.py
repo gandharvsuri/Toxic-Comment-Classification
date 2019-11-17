@@ -60,7 +60,7 @@ def CorrMatrix(data):
     plt.figure(figsize=(12,10))
     matrix = sns.heatmap(corr_matrix,annot = True)
     matrix =  matrix.get_figure()
-    matrix.savefig('./Visualizations/CorrealationMatrix.png')
+    matrix.savefig('./Visualizations/Correlation_Matrix.png')
 
 
 if __name__ == "__main__":
