@@ -12,6 +12,13 @@ from nltk.tokenize import word_tokenize
 # Global counter for the number of comments
 i = 0
 
+''' Removing excessive length comments '''
+def removeExcessComments(data):
+    data_filtered = data[data["comment_text"].str.len() < 400]
+    data_filtered.reset_index(inplace = True)
+    data_filtered.drop(columns=['index'],axis = 1)
+    return data_filtered
+
 ''' Basic Cleaning of text. '''
 def textPreProcessing(comment):
     # Convert the comments to lowercase
@@ -69,39 +76,39 @@ def stemming(comment):
     print("Stemming...")
     return stemmedComment
 
-''' Identifying clean comments. '''
-#def cleanComments(row):
-    
-
-
 ''' Apply all the pre-processing functions. '''
 def applyPreProcessing(data):
-    comment = data["comment_text"]
-    comment = textPreProcessing(comment)
-    comment = removeStopWords(comment)
-    comment = lemmatization(comment)
-    comment = stemming(comment)
+    comments = data["comment_text"]
+    comments = textPreProcessing(comments)
+    comments = removeStopWords(comments)
+    comments = lemmatization(comments)
+    comments = stemming(comments)
 
     # View the number of comments getting preprocessed
     global i
     i = i + 1
-    print("Comments pre-processed : " + str(i) + " / 159571")    
-    return comment
+    print("Comments pre-processed : " + str(i))    
+    
+    return comments
 
 
 if __name__ == "__main__":
     train_data = pd.read_csv("Data/train.csv")
     test_data = pd.read_csv("Data/test.csv")
-    print(train_data.info())
+    train_data = removeExcessComments(train_data)    
+    test_data = removeExcessComments(test_data)    
+    print(train_data)
+    
     train_data["comment_text"] = train_data.apply(lambda data : applyPreProcessing(data),axis = 1)
     test_data["comment_text"] = test_data.apply(lambda data : applyPreProcessing(data), axis = 1)
+    
     # Identifying clean comments
     train_data["clean"] = [1 if x == 0 else 0 for x in np.sum(train_data.values == 1, 1)]
+    
     print(train_data)
     print(test_data)
     train_data.to_csv(r'Data/ppc_train.csv')
     test_data.to_csv(r'Data/ppc_test.csv')
-    # print(test_data)
 
 
 
