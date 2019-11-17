@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 def labelBarGraph(label):
     fig_size = plt.rcParams["figure.figsize"]
@@ -53,11 +54,21 @@ def classifiedCommentsLengthHistogram(comment,label):
     plt.savefig("Visualizations/Classified_Comments_Histogram.png")
     plt.show()
 
+
+def CorrMatrix(data):
+    corr_matrix = data.corr()
+    plt.figure(figsize=(12,10))
+    matrix = sns.heatmap(corr_matrix,annot = True)
+    matrix =  matrix.get_figure()
+    matrix.savefig('./Visualizations/CorrealationMatrix.png')
+
+
 if __name__ == "__main__":
     data = pd.read_csv("Data/train.csv")
     comment = data["comment_text"]
     label = data[['toxic', 'severe_toxic' , 'obscene' , 'threat' , 'insult' , 'identity_hate']]
 
-    labelBarGraph(label)
-    lengthHistogram(comment)
-    classifiedCommentsLengthHistogram(comment,label)
+    #labelBarGraph(label)
+    #lengthHistogram(comment)
+    #classifiedCommentsLengthHistogram(comment,label)
+    CorrMatrix(data)
