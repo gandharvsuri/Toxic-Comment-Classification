@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[67]:
-
 
 # Required library imports
 import numpy as np
@@ -31,8 +26,8 @@ def xyz(data,test_data):
 
     train_text = data['comment_text'].values.astype(str)
     test_text = test_data['comment_text'].values.astype(str)
-    #all_text = pd.concat([train_text, test_text])
-    train_features,test_features = get_features(train_text,test_text)
+    all_text = np.concatenate([train_text, test_text])
+    train_features,test_features = get_features(train_text,test_text,all_text)
 
     submission = pd.DataFrame.from_dict({'Id': test_data['id']})
     # classifier1 = LogisticRegression(solver='sag', max_iter=180)
