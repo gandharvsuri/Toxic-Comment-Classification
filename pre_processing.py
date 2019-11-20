@@ -96,7 +96,7 @@ if __name__ == "__main__":
     train_data = pd.read_csv("Data/train.csv")
     test_data = pd.read_csv("Data/test.csv")
     train_data = removeExcessComments(train_data)    
-    test_data = removeExcessComments(test_data)    
+    #test_data = removeExcessComments(test_data)    
     print(train_data)
     
     train_data["comment_text"] = train_data.apply(lambda data : applyPreProcessing(data),axis = 1)

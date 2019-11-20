@@ -5,9 +5,6 @@ from scipy.sparse import hstack
 import regex as re
 import regex, string
 
-data = pd.read_csv('./Data/ppc_train.csv')
-test_data = pd.read_csv('./Data/ppc_test.csv')
-
 def word_vec(train_text,test_text,all_text):
     word_vectorizer = TfidfVectorizer(
         sublinear_tf=True,

@@ -22,7 +22,7 @@ def pr(y_i, y,train_features):
     p = train_features[y==y_i].sum(0)
     return (p+1) / ((y==y_i).sum()+1)
 
-def xyz(data,test_data):
+def EasyEnsembleClassfier(data,test_data):
 
     train_text = data['comment_text'].values.astype(str)
     test_text = test_data['comment_text'].values.astype(str)
@@ -64,4 +64,4 @@ if __name__ == "__main__":
 
     data = pd.read_csv('./Data/ppc_train.csv')
     test_data = pd.read_csv('./Data/ppc_test.csv')
-    xyz(data,test_data)
+    EasyEnsembleClassfier(data,test_data)
