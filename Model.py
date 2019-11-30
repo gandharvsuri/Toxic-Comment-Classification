@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import learning_curve
 from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import VotingClassifier
-
+from sklearn.externals import joblib
 
 from features_extraction import get_features
 
@@ -30,11 +30,6 @@ def EasyEnsembleClassfier(data,test_data):
     train_features,test_features = get_features(train_text,test_text,all_text)
 
     submission = pd.DataFrame.from_dict({'Id': test_data['id']})
-    # classifier1 = LogisticRegression(solver='sag', max_iter=180)
-    # classifier2 = SGDClassifier(alpha=.00027, max_iter=180, penalty="l2", loss='modified_huber')
-    # classifier4 = ComplementNB(alpha=0.00027, class_prior=None, fit_prior=False)
-    # eclassifier = VotingClassifier(estimators=[ ('lr', classifier1), ('sgd', classifier2), ('ComplementNB', classifier4)], voting='soft', weights=[1,0.8,0.6])
-    """For using a stacking classifier, do refer to mlextend.ensemble's StackingClassifier"""
     for class_name in class_names:
         train_target = data[class_name]
         y = train_target.values
@@ -48,17 +43,11 @@ def EasyEnsembleClassfier(data,test_data):
                 min_weight_fraction_leaf=0.0, n_estimators=80)  
         m = VotingClassifier(estimators=[ ('lr', l), ('sgd', n),('lr1',o),('rdf',p)], voting='soft', weights=[0.9,1.35,0.65,0.8])
         m.fit(x_nb, y)
-        """For cross validation scores please uncomment the following lines of code"""
 
-    #     cv_score = np.mean(cross_val_score(
-    #         m, x_nb, train_target, cv=5, scoring='roc_auc'))
-    #     scores.append(cv_score)
-    #     print('CV score for class {} is {}'.format(class_name, cv_score))
-    # print('Total CV score is {}'.format(np.mean(scores)))
         submission[class_name] = m.predict_proba(test_features.multiply(r))[:, 1]
 
         submission.to_csv('EnsembleClassfierSubmission_2.csv', index=False)
-
+        joblib.dump(m,'Ensemble.pkl')
 
 if __name__ == "__main__":
 
